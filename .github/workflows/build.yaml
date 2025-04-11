@@ -16,26 +16,26 @@ jobs:
               with:
                 python-version: '3.13'
                 cache: 'pip'
-            # - name: Install dependecies
-            #   run: pip install -r requirements.txt
-            # - name: Unit tests
-              # run: pytest
-            # - name: Create Docker image
-            #   run: docker build -t employee-python .
-            # - name: Log in to the Container registry
-            #   uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
-            #   with:
-            #     registry: ghcr.io
-            #     username: ${{ github.actor }}
-            #     password: ${{ secrets.GITHUB_TOKEN }}
+            - name: Install dependecies
+              run: pip install -r requirements.txt
+            - name: Unit tests
+              run: pytest
+            - name: Create Docker image
+              run: docker build -t employee-python .
+            - name: Log in to the Container registry
+              uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
+              with:
+                registry: ghcr.io
+                username: ${{ github.actor }}
+                password: ${{ secrets.GITHUB_TOKEN }}
             - name: Read version from VERSION file
               run: echo "VERSION=$(cat VERSION)" >> $GITHUB_ENV
-            # - name: Build and push Docker image
-            #   uses: docker/build-push-action@v4
-            #   with:
-            #     context: .
-            #     push: true
-            #     tags: ghcr.io/${{ github.repository }}:${{ env.VERSION }}
+            - name: Build and push Docker image
+              uses: docker/build-push-action@v4
+              with:
+                context: .
+                push: true
+                tags: ghcr.io/${{ github.repository }}:${{ env.VERSION }}
             - name: Pass output
               id: set_version
               run: echo "version=${{ env.VERSION }}" >> $GITHUB_OUTPUT

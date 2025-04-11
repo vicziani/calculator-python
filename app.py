@@ -9,7 +9,7 @@ def add():
     a = input.get("a")
     b = input.get("b")
     sum = a + b
-    return jsonify({"sum": sum})
+    return jsonify({"sum": sum, "message": "hello1"})
 
 
 if __name__ == "__main__":
