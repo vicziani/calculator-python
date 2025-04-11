@@ -1,0 +1,37 @@
+name: Build
+on:
+    push:
+        branches: [master]
+jobs:
+    build:
+        name: Build
+        runs-on: ubuntu-latest
+        permissions:
+            packages: write    
+        steps:
+            - uses: actions/checkout@v4
+            - uses: actions/setup-python@v5
+              with:
+                python-version: '3.13'
+                cache: 'pip'
+            - name: Install dependecies
+              run: pip install -r reqirements.txt
+            - name: Unit tests
+              run: pytest
+            - name: Create Docker image
+              run: docker build -t employee-python .
+            - name: Log in to the Container registry
+              uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
+              with:
+                registry: ghcr.io
+                username: ${{ github.actor }}
+                password: ${{ secrets.GITHUB_TOKEN }}
+            - name: Read version from VERSION file
+              id: get_version
+              run: echo "VERSION=$(cat VERSION)" >> $GITHUB_ENV
+            - name: Build and push Docker image
+              uses: docker/build-push-action@v4
+              with:
+                context: .
+                push: true
+                tags: ghcr.io/${{ github.repository }}:${{ env.VERSION }}

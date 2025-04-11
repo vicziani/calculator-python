@@ -1,0 +1,7 @@
+POST http://localhost:5000/api/add
+Content-Type: application/json
+
+{
+  "a": 5,
+  "b": 3
+}
