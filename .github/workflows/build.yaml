@@ -30,12 +30,12 @@ jobs:
             #     password: ${{ secrets.GITHUB_TOKEN }}
             - name: Read version from VERSION file
               run: echo "VERSION=$(cat VERSION)" >> $GITHUB_ENV
-            - name: Build and push Docker image
-              uses: docker/build-push-action@v4
-              with:
-                context: .
-                push: true
-                tags: ghcr.io/${{ github.repository }}:${{ env.VERSION }}
+            # - name: Build and push Docker image
+            #   uses: docker/build-push-action@v4
+            #   with:
+            #     context: .
+            #     push: true
+            #     tags: ghcr.io/${{ github.repository }}:${{ env.VERSION }}
             - name: Pass output
               id: set_version
               run: echo "version=${{ env.VERSION }}" >> $GITHUB_OUTPUT
