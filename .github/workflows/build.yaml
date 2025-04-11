@@ -35,3 +35,28 @@ jobs:
                 context: .
                 push: true
                 tags: ghcr.io/${{ github.repository }}:${{ env.VERSION }}
+
+    update-deployment:
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout config repo
+          uses: actions/checkout@v4
+          with:
+            repository: vicziani/calculator-python-config
+            token: ${{ secrets.GITHUB_TOKEN }}
+            path: config-repo
+        - name: Read version from VERSION file
+          id: get_version
+          run: echo "VERSION=$(cat VERSION)" >> $GITHUB_ENV
+        - name: Update image tag in YAML
+          run: |
+            cd config-repo
+            yq e '(.spec.template.spec.containers[] | select(.name == "calculator-python")).image = "ghcr.io/vicziani/calculator-python:${{ env.VERSION }} }}"' -i dev/deployment.yaml
+
+        - name: Commit and push
+          run: |
+            cd config-repo
+            git config user.name "CI Bot"
+            git config user.email "ci-bot@example.com"
+            git commit -am "chore: update image tag to ${{ env.VERSION }}"
+            git push

@@ -11,3 +11,25 @@ docker build -t calculator-python:1.0.0 .
 ```
 
 [Publishing Docker images](https://docs.github.com/en/actions/use-cases-and-examples/publishing-packages/publishing-docker-images)
+
+## Argo CD
+
+```shell
+kubectl create namespace argocd
+kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+kubectl port-forward -n argocd svc/argocd-server 8080:443
+```
+
+http://localhost:8080
+
+```shell
+kubectl exec -n argocd deploy/argocd-server -- argocd admin initial-password -n argocd
+```
+
+Username: `admin`
+
+3 percenként polloz, vagy webhook
+
+```shell
+kubectl apply -f application.yaml
+```
